@@ -3,6 +3,7 @@ package com.springboot.blog.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +22,13 @@ public class PostServiceImpl implements PostService{
   
 	private PostRepository postRepository;
 	
-	@Autowired
-	public PostServiceImpl(PostRepository postRepository) {
+	private ModelMapper modelMapper;
+	
+	
+public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper) {
+		
 		this.postRepository = postRepository;
+		this.modelMapper = modelMapper;
 	}
 
 
@@ -87,20 +92,22 @@ public class PostServiceImpl implements PostService{
 	
 	//Convert entity to DTO
 	private PostDto mapToDto(Post newPost) {
-		PostDto postResponse = new PostDto();
-		postResponse.setId(newPost.getId());
-		postResponse.setTitle(newPost.getTitle());
-		postResponse.setDescription(newPost.getDescription());
-		postResponse.setContent(newPost.getContent());
+		PostDto postResponse=modelMapper.map(newPost,PostDto.class);
+//		PostDto postResponse = new PostDto();
+//		postResponse.setId(newPost.getId());
+//		postResponse.setTitle(newPost.getTitle());
+//		postResponse.setDescription(newPost.getDescription());
+//		postResponse.setContent(newPost.getContent());
 		return postResponse;
 	}
 
     //Convert DTO to Entity
 	private Post mapToEntity(PostDto postDto) {
-		Post post = new Post();
-		post.setTitle(postDto.getTitle());
-		post.setDescription(postDto.getDescription());
-		post.setContent(postDto.getContent());
+		Post post=modelMapper.map(postDto,Post.class);
+//		Post post = new Post();
+//		post.setTitle(postDto.getTitle());
+//		post.setDescription(postDto.getDescription());
+//		post.setContent(postDto.getContent());
 		
 		return post;
 	}
